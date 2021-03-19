@@ -1,94 +1,93 @@
-# Nullish coalescing operator '??'
+# Оператор null-об'єднання '??'
 
 [recent browser="new"]
 
-The nullish coalescing operator is written as two question marks `??`.
+Оператор null-об'єднання позначається, як два знаки питання `??`.
 
-As it treats `null` and `undefined` similarly, we'll use a special term here, in this article. We'll say that an expression is "defined" when it's neither `null` nor `undefined`.
+У цій статті ми говоритимемо, що вираз є "визначеним" коли він не є ні `null` ні `undefined`.
 
-The result of `a ?? b` is:
-- if `a` is defined, then `a`,
-- if `a` isn't defined, then `b`.
+Результатом виразу `a ?? b` буде наступне:
+- якщо `a` визначене, то `a`,
+- якщо `a` не визначене, то `b`.
 
-In other words, `??` returns the first argument if it's not `null/undefined`. Otherwise, the second one.
 
-The nullish coalescing operator isn't anything completely new. It's just a nice syntax to get the first "defined" value of the two.
+Тобто оператор `??` повертає перший аргумент, якщо він не `null/undefined`. В іншому випадку - другий.
 
-We can rewrite `result = a ?? b` using the operators that we already know, like this:
+Оператор null-об'єднання не є чимось абсолютно новим. Це лише гарний синтаксис, щоб отримати одне "визначене" значення з двох.
+
+Ми можемо переписати вираз `result = a ?? b` використовуючи вже знайомі нам оператори:
 
 ```js
 result = (a !== null && a !== undefined) ? a : b;
 ```
 
-Now it should be absolutely clear what `??` does. Let's see where it helps.
+Здебільшого`??` використовується для надання значення за замовчуванням для потенційно невизначеної змінної.
 
-The common use case for `??` is to provide a default value for a potentially undefined variable.
-
-For example, here we show `user` if defined, otherwise `Anonymous`:
+Наприклад, ми побачимо `Анонім`, якщо `user` не визначений:
 
 ```js run
 let user;
 
-alert(user ?? "Anonymous"); // Anonymous (user not defined)
+alert(user ?? "Анонім"); // Анонім
 ```
 
-Here's the example with `user` assigned to a name:
+Звичайно, якщо змінна `user` має будь-яке значення, крім `null/undefined`, то ми побачимо його:
 
 ```js run
-let user = "John";
+let user = "Тарас";
 
-alert(user ?? "Anonymous"); // John (user defined)
+alert(user ?? "Анонім"); // Тарас
 ```
 
-We can also use a sequence of `??` to select the first value from a list that isn't `null/undefined`.
+Ми також можемо використати послідовність `??` щоб вибрати перше значення зі списку, яке не є `null/undefined`.
 
-Let's say we have a user's data in variables `firstName`, `lastName` or `nickName`. All of them may be not defined, if the user decided not to enter a value.
+Скажімо, у нас є дані користувача у змінних `firstName`, `lastName` або `nickName`. Всі вони можуть бути невизначеними, якщо користувач вирішив не вводити значення.
 
-We'd like to display the user name using one of these variables, or show "Anonymous" if all of them aren't defined.
+Виведем ім'я користувача, використовуючи одну з цих змінних, або покаже "Анонім", якщо всі вони не визначені.
 
-Let's use the `??` operator for that:
-
-```js run
-let firstName = null;
-let lastName = null;
-let nickName = "Supercoder";
-
-// shows the first defined value:
-*!*
-alert(firstName ?? lastName ?? nickName ?? "Anonymous"); // Supercoder
-*/!*
-```
-
-## Comparison with ||
-
-The OR `||` operator can be used in the same way as `??`, as it was described in the [previous chapter](info:logical-operators#or-finds-the-first-truthy-value).
-
-For example, in the code above we could replace `??` with `||` and still get the same result:
+Для цього використовуємо оператор `??`:
 
 ```js run
 let firstName = null;
 let lastName = null;
-let nickName = "Supercoder";
+let nickName = "Суперкодер";
 
-// shows the first truthy value:
+// покаже перше визначене значення:
 *!*
-alert(firstName || lastName || nickName || "Anonymous"); // Supercoder
+alert(firstName ?? lastName ?? nickName ?? "Анонім"); // Суперкодер
 */!*
 ```
 
-Historically, the OR `||` operator was there first. It exists since the beginning of JavaScript, so developers were using it for such purposes for a long time.
+## Порівняння з ||
 
-On the other hand, the nullish coalescing operator `??` was added to JavaScript only recently, and the reason for that was that people weren't quite happy with `||`.
+Оператор АБО `||` може використовуватись для того ж, що й `??`, як це було показано в [попередньому розділі](info:logical-operators#or-finds-the-first-truthy-value).
 
-The important difference between them is that:
-- `||` returns the first *truthy* value.
-- `??` returns the first *defined* value.
+Наприклад, якщо в зазначеному вище коді замінити `??` на `||`, то буде той самий результат:
 
-In other words, `||` doesn't distinguish between `false`, `0`, an empty string `""` and `null/undefined`. They are all the same -- falsy values. If any of these is the first argument of `||`, then we'll get the second argument as the result.
+```js run
+let firstName = null;
+let lastName = null;
+let nickName = "Суперкодер";
 
-In practice though, we may want to use default value only when the variable is `null/undefined`. That is, when the value is really unknown/not set.
+// показує перше істине значення:
+*!*
+alert(firstName || lastName || nickName || "Анонім"); // Суперкодер
+*/!*
+```
 
-For example, consider this:
+Оператор АБО `||` існує з самої появи JavaScript, тому раніше для рішення подібних задач використовували саме його.
+
+З іншої сторони, відносно недавно був доданий оператор null-об'єднання `??` саме тому, що було багато незадоволених оператором `||`.
+
+Важлива відмінність між ними полягає ось у чому:
+- `||` повертає перше *істине* значення.
+- `??` повертає перше *визначене* значення.
+
+Іншими словами, оператор `||` не розрізняє `false`, `0`, порожній рядок `""` та `null/undefined`. Всі вони однакові -- хибні. Якщо будь-який з них є першим аргументом для `||`, то як результат отримаємо другий аргумент.
+
+Однак на практиці може знадобитись використання значення за замовчуванням лише тоді, коли змінна має значення `null/undefined`. Тобто, коли значення насправді невідоме/не визначене.
+
+Наприклад, розглянемо цей приклад:
 
 ```js run
 let height = 0;
@@ -97,73 +96,72 @@ alert(height || 100); // 100
 alert(height ?? 100); // 0
 ```
 
-- The `height || 100` checks `height` for being a falsy value, and it's `0`, falsy indeed.
-    - so the result of `||` is the second argument, `100`.
-- The `height ?? 100` checks `height` for being `null/undefined`, and it's not,
-    - so the result is `height` "as is", that is `0`.
+- `height || 100` перевіряє, чи має змінна `height` хибне значення, що є насправді.
+    - отже, результатом є другий аргумент, `100`.
+- `height ?? 100` перевіряє, чи змінна `height` містить `null/undefined`, оскільки це не так,
+    - отже результатом є саме змінна `height`, тобто `0`.
 
-In practice, the zero height is often a valid value, that shouldn't be replaced with the default. So `??` does just the right thing.
+Якщо нульова висота є допустимим значенням, яке не слід замінювати значенням за замовчуванням, тоді `??` робить саме те, що потрібно.
 
-## Precedence
+## Пріоритет
 
-The precedence of the `??` operator is about the same as `||`, just a bit lower. It equals `5` in the [MDN table](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence#Table), while `||` is `6`.
+Пріоритет оператора `??` досить низький: `5` у [MDN таблиці](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence#Table). Отже `??` обчислюється перед `=` та `?`, але після більшості інших, таких як `+`, `*`.
 
-That means that, just like `||`, the nullish coalescing operator `??` is evaluated before `=` and `?`, but after most other operations, such as `+`, `*`.
-
-So if we'd like to choose a value with `??` in an expression with other operators, consider adding parentheses:
+Отже, якщо ми хочемо обрати значення за допомогою оператора `??` у виразі з іншими операторами, варто додати круглі дужки:
 
 ```js run
 let height = null;
 let width = null;
 
-// important: use parentheses
+// важливо: використовуйте круглі дужки
 let area = (height ?? 100) * (width ?? 50);
 
 alert(area); // 5000
 ```
 
-Otherwise, if we omit parentheses, then as `*` has the higher precedence than `??`, it would execute first, leading to incorrect results.
+Інакше, якщо опустити дужки, то оператор `*` виконається першим, тому що у нього пріоритет вище, ніж у `??`, що призведе до неправильних результатів.
 
 ```js
-// without parentheses
+// без круглих дужок
 let area = height ?? 100 * width ?? 50;
 
-// ...works the same as this (probably not what we want):
+// ...теж саме, що й попередній вираз (вірогідно, це не те, що потрібно):
 let area = height ?? (100 * width) ?? 50;
 ```
 
-### Using ?? with && or ||
+### Використання ?? разом з && або ||
 
-Due to safety reasons, JavaScript forbids using `??` together with `&&` and `||` operators, unless the precedence is explicitly specified with parentheses.
+З міркувань безпеки, JavaScript забороняє використовувати оператор `??` разом з `&&` та `||`, якщо пріоритет не вказаний круглими дужками.
 
-The code below triggers a syntax error:
+Наведений нижче код викликає синтаксичну помилку:
 
 ```js run
-let x = 1 && 2 ?? 3; // Syntax error
+let x = 1 && 2 ?? 3; // Синтаксична помилка
 ```
 
-The limitation is surely debatable, it was added to the language specification with the purpose to avoid programming mistakes, when people start to switch from `||` to `??`.
+Безумовно, обмеження спірне, але воно було додано до специфікації мови з метою уникнення помилок програмування, при переході на `??` з `||`.
 
-Use explicit parentheses to work around it:
+Використовуйте круглі дужки, аби обійти обмеження:
 
 ```js run
 *!*
-let x = (1 && 2) ?? 3; // Works
+let x = (1 && 2) ?? 3; // Працює
 */!*
 
 alert(x); // 2
 ```
 
-## Summary
+## Підсумки
 
-- The nullish coalescing operator `??` provides a short way to choose the first "defined" value from a list.
+- Оператор null-об'єднання `??` надає короткий спосіб обрати перше "визначене" значення зі списку.
 
-    It's used to assign default values to variables:
+    Він використовується для привласнення значенням за замовчуванням змінним:
 
     ```js
-    // set height=100, if height is null or undefined
+    // set height=100, якщо змінна height є null або undefined
     height = height ?? 100;
     ```
 
-- The operator `??` has a very low precedence, only a bit higher than `?` and `=`, so consider adding parentheses when using it in an expression.
-- It's forbidden to use it with `||` or `&&` without explicit parentheses.
+- Оператор `??` має дуже низький пріоритет, не на багато вищий за `?` та `=`, тому додавайте дужки, при використанні його у виразах.
+- Заборонено використовувати його з `||` або `&&` без явних круглих дужок.
+
